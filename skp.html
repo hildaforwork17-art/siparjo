@@ -38,13 +38,26 @@ padding:10px;
 border-radius:5px;
 display:inline-block;
 font-weight:bold;
+color:white;
+}
+
+.valid{
+background:green;
+}
+
+.revisi-status{
+background:#d9534f;
+}
+
+.menunggu{
+background:orange;
 }
 
 .revisi{
 background:#ffe5e5;
 padding:15px;
 border-radius:5px;
-margin-top:10px;
+margin-top:15px;
 }
 
 iframe{
@@ -62,6 +75,19 @@ font-size:14px;
 background:red;
 padding:8px 15px;
 border-radius:5px;
+}
+
+button{
+background:#1a73e8;
+color:white;
+border:none;
+padding:10px 20px;
+cursor:pointer;
+border-radius:5px;
+}
+
+input[type=file]{
+margin-top:10px;
 }
 
 </style>
@@ -89,6 +115,8 @@ Kembali
 <div id="status"></div>
 
 <div id="revisi"></div>
+
+<div id="uploadArea"></div>
 
 </div>
 
@@ -126,28 +154,87 @@ var data = await response.json();
 
 if(data.success){
 
+var statusClass = "menunggu";
+
+if(data.status.toLowerCase() == "valid"){
+statusClass = "valid";
+}
+
+if(data.status.toLowerCase() == "revisi"){
+statusClass = "revisi-status";
+}
+
 document.getElementById("status").innerHTML =
-"<div class='status'>" +
+
+"<div class='status " + statusClass + "'>" +
 data.status +
 "</div>";
 
+
+// ======================
+// STATUS REVISI
+// ======================
+
+if(data.status.toLowerCase() == "revisi"){
+
 document.getElementById("revisi").innerHTML =
+
 "<div class='revisi'>" +
+
 "<b>Catatan Revisi:</b><br>" +
+
 data.revisi +
+
 "</div>";
 
+document.getElementById("uploadArea").innerHTML =
+
+"<br><h3>Upload Revisi SKP</h3>" +
+
+"<input type='file' id='fileRevisi'>" +
+
+"<br><br>" +
+
+"<button onclick='uploadRevisi()'>Upload Revisi</button>";
+
+}else{
+
+document.getElementById("revisi").innerHTML = "";
+document.getElementById("uploadArea").innerHTML = "";
+
+}
+
+
+// ======================
+// PREVIEW PDF
+// ======================
+
 document.getElementById("preview").innerHTML =
+
 "<iframe src='https://drive.google.com/file/d/" +
+
 data.file_skp +
+
 "/preview'></iframe>";
 
 }else{
 
 document.getElementById("preview").innerHTML =
+
 "Data SKP belum tersedia";
 
 }
+
+}
+
+
+// ======================
+// DUMMY UPLOAD
+// ======================
+
+function uploadRevisi(){
+
+alert("Fitur upload revisi akan dibuat berikutnya");
 
 }
 
