@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>SiPARJO Dashboard</title>
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#f5f5f5;
+}
+
+.header{
+background:#1a73e8;
+color:white;
+padding:15px;
+font-size:22px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.menu{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+}
+
+.menu a{
+text-decoration:none;
+background:#1a73e8;
+color:white;
+padding:20px;
+border-radius:10px;
+text-align:center;
+font-weight:bold;
+}
+
+.menu a:hover{
+opacity:0.9;
+}
+
+.info{
+margin-top:10px;
+font-size:14px;
+color:#666;
+}
+
+.logout{
+float:right;
+background:red;
+padding:8px 15px;
+border-radius:5px;
+color:white;
+text-decoration:none;
+font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+SiPARJO
+
+<a href="login.html"
+class="logout"
+onclick="logout()">
+Logout
+</a>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Selamat Datang</h2>
+
+<div id="nama"></div>
+
+<div class="info">
+Portal Monitoring Kinerja Pegawai
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Pengumuman</h3>
+
+<div id="pengumuman">
+Loading...
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Menu</h3>
+
+<div class="menu">
+
+<a href="#">
+SKP
+</a>
+
+<a href="#">
+RENKIN
+</a>
+
+<a href="#">
+Evaluasi Bulanan
+</a>
+
+<a href="#">
+Status Dokumen
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+var nama =
+localStorage.getItem("nama");
+
+if(!nama){
+
+window.location.href =
+"login.html";
+
+}
+
+document.getElementById("nama").innerHTML =
+"Halo, " + nama;
+
+function logout(){
+
+localStorage.clear();
+
+}
+
+loadPengumuman();
+
+async function loadPengumuman(){
+
+var response = await fetch(
+"https://script.google.com/macros/s/AKfycbwG2C3CVO47gjy2-wH6zfEsePXavzUSePD_okSltLZqfo7i1M1xq_nukCHEh6owNZzlpA/exec?action=pengumuman"
+);
+
+var data = await response.json();
+
+var html = "<ul>";
+
+for(var i=0; i<data.length; i++){
+
+html += "<li><b>" +
+data[i].tanggal +
+"</b> - " +
+data[i].isi +
+"</li>";
+
+}
+
+html += "</ul>";
+
+document.getElementById("pengumuman").innerHTML =
+html;
+
+}
+
+</script>
+
+</body>
+
+</html>
