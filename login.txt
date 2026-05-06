@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>SiPARJO Login</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.box{
+background:white;
+padding:30px;
+width:320px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-bottom:15px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:10px;
+border:none;
+background:#1a73e8;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+#info{
+margin-top:10px;
+text-align:center;
+color:red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>SiPARJO</h2>
+
+<input type="text" id="nip" placeholder="NIP / Username">
+
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="login()">LOGIN</button>
+
+<div id="info"></div>
+
+</div>
+
+<script>
+
+async function login(){
+
+var nip =
+document.getElementById("nip").value;
+
+var password =
+document.getElementById("password").value;
+
+var formData = new URLSearchParams();
+
+formData.append("action","login");
+formData.append("nip",nip);
+formData.append("password",password);
+
+var response = await fetch(
+"https://script.google.com/macros/s/AKfycbwG2C3CVO47gjy2-wH6zfEsePXavzUSePD_okSltLZqfo7i1M1xq_nukCHEh6owNZzlpA/exec",
+{
+method:"POST",
+body:formData
+}
+);
+
+var result = await response.json();
+
+if(result.success){
+
+localStorage.setItem("nip", nip);
+localStorage.setItem("role", result.role);
+localStorage.setItem("nama", result.nama);
+
+if(result.role == "ADMIN"){
+
+window.location.href = "admin.html";
+
+}else{
+
+window.location.href = "dashboard.html";
+
+}
+
+}else{
+
+document.getElementById("info").innerHTML =
+"Login gagal";
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
