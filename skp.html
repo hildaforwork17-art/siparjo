@@ -232,9 +232,80 @@ document.getElementById("preview").innerHTML =
 // DUMMY UPLOAD
 // ======================
 
-function uploadRevisi(){
+async function uploadRevisi(){
 
-alert("Fitur upload revisi akan dibuat berikutnya");
+var fileInput =
+document.getElementById("fileRevisi");
+
+if(fileInput.files.length == 0){
+
+alert("Pilih file terlebih dahulu");
+
+return;
+
+}
+
+var file = fileInput.files[0];
+
+var reader = new FileReader();
+
+reader.onload = async function(){
+
+var base64 =
+reader.result.split(",")[1];
+
+var formData =
+new URLSearchParams();
+
+formData.append(
+"action",
+"uploadRevisiSKP"
+);
+
+formData.append(
+"nip",
+nip
+);
+
+formData.append(
+"file",
+base64
+);
+
+formData.append(
+"fileName",
+file.name
+);
+
+document.getElementById("uploadArea").innerHTML =
+"Uploading...";
+
+var response = await fetch(
+"https://script.google.com/macros/s/AKfycbwJ-pezwlXRFcpVvEb_ACLlW1wQHXQrJPHTETYg3dNiwN0hFJIR2p1mSGNJlAuP3GStpg/exec",
+{
+method:"POST",
+body:formData
+}
+);
+
+var result =
+await response.json();
+
+if(result.success){
+
+alert("Upload revisi berhasil");
+
+location.reload();
+
+}else{
+
+alert("Upload gagal");
+
+}
+
+};
+
+reader.readAsDataURL(file);
 
 }
 
